@@ -18,7 +18,11 @@ class User{
         }
 }
 
-function 
+function distruiberPage(name){
+    if(Object.keys(name).roleUser=="ADMIN"){
+        location.href="./main.html";
+    }
+}
 
 function login(){
 	var login=document.getElementById("idUser").value;
