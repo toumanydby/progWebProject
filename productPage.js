@@ -29,7 +29,15 @@ class Product {
     }
 }
 
-var productsList = [];
+var productsList = JSON.parse(window.localStorage.getItem("productsList")); // Retrieving
+
+function saveProductsList() {
+    window.localStorage.setItem("productsList",JSON.stringify(productsList));
+}
+
+function deleteAllProducts(){
+    productsList = [];
+}
 
 function createNewProduct() {
     let idProduct = productsList.length;
@@ -44,6 +52,7 @@ function createNewProduct() {
 
     productsList.push(product);
     clearCreateNewProductForm();
+    saveProductsList();
     console.log(productsList);
     renderProductsList();
 }
@@ -76,10 +85,53 @@ function renderProductsList(){
 
         let divElement = document.createElement('div');
         divElement.setAttribute('id', productDivId); // and make sure myclass has some styles in css
+        divElement.setAttribute("class","eachProductDivClass");
+
+        let refElement = document.createElement('p');
+        refElement.setAttribute("class","productReferenceClass");
+        refElement.textContent = referenceP;
+
+        let nameElement = document.createElement('p');
+        nameElement.setAttribute("class","productNameClass");
+        nameElement.textContent = nameP;
+
+        let quantityElement = document.createElement('p');
+        quantityElement.setAttribute("class","productQuantityClass");
+        quantityElement.textContent = quantityP;
+
+        let labelForSelectActionElt = document.createElement('label');
+        labelForSelectActionElt.setAttribute('for','actionPanelSelect');
+        labelForSelectActionElt.textContent = "Actions";
+
+        let selectActionPanelElt = document.createElement('select');
+        selectActionPanelElt.setAttribute("name","actionPanel");
+        selectActionPanelElt.setAttribute("id","actionPanelSelect");
+        
+        let optNull = document.createElement('option');
+        optNull.setAttribute('value','');
+        optNull.textContent ="Please select an action";
+
+        let optDelete = document.createElement('option');
+        optDelete.setAttribute('value','delete');
+        optDelete.textContent = "Delete";
+
+        let optModify = document.createElement('option');
+        optModify.setAttribute('value','Edit');
+        optModify.textContent = "Edit";
+
+        selectActionPanelElt.appendChild(optNull);
+        selectActionPanelElt.appendChild(optDelete);
+        selectActionPanelElt.appendChild(optModify);
+
         let imageElement = document.createElement('img');
         imageElement.setAttribute("src", imageUrl);
         imageElement.setAttribute("class", "productImageClass");
 
+        divElement.appendChild(refElement);
+        divElement.appendChild(nameElement);
+        divElement.appendChild(quantityElement);
+        divElement.appendChild(labelForSelectActionElt);
+        divElement.appendChild(selectActionPanelElt);
         divElement.appendChild(imageElement);
 
         productsDiv.appendChild(divElement);
