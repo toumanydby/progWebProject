@@ -11,7 +11,7 @@
 
     <!-- FONT CSS -->
 
-    <link href="//db.onlinewebfonts.com/c/6a17929c7360288d1242981da7712dc3?family=Torus+Notched" rel="stylesheet"
+    <link href="https://db.onlinewebfonts.com/c/6a17929c7360288d1242981da7712dc3?family=Torus+Notched" rel="stylesheet"
         type="text/css" />
 
 
@@ -27,6 +27,10 @@
             var productsList = JSON.parse(window.localStorage.getItem("productsList")); // Retrieving
             console.log(productsList);
         }
+
+        function deleteAllProducts(){
+            productsList = [];
+        }
     </script>
 
     <header>
@@ -38,8 +42,7 @@
 
             <div class="onglet">
                 <ul>
-                    <li><a href="productsPage.html">Ajoute un Objet</a> </li>
-                    <li><a href="#">Rechercher un Objet</a> </li>
+                    <li><a href="productsPage.html">Produits</a> </li>
                     <li><a href="#">A propos</a> </li>
                     <li><a href="#">En savoirs plus</a> </li>
 
@@ -65,15 +68,12 @@
                 </button>
             </a>
             <div class="bg-responsive">
-                <img src="img/11.png" alt="" />
+                <img src="11.png" alt="" />
             </div>
 
         </div>
 
     </div>
-
-    <button onclick="getProductsList()">BUTTTONSSSS</button>
-
 </body>
 
 </html>
