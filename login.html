@@ -4,24 +4,31 @@
         <meta charset="UTF-8">
         <title>LOGIN</title>
         
+	<link rel="stylesheet" type="text/css" href="login.css"/>
+	<script type="text/javascript" src="login.js"></script>
     </head>
 
 
 
 
 	<body>
-		<script type="text/javascript" src="./login.js"></script>
+	<div id="login_frame">	
+		
+	<p id="image_logo"><img src="https://assets.msn.com/statics/icons/favicon_newtabpage.png"></p>
+		
+	<form method="post" action="login.js">
+		
+		<p><label class="label_input">id:</label><input type="text" id="username" class="text_field"/></p>
+		<p><label class="label_input">Mot de passe:</label><input type="text" id="password" class="text_field"/></p>
 
-
-        
-                
-		id:<input type="text" id="idUser" name="idUser">
-		Mot de passe:<input type="text" id="mdpUser" name="mdpUser">
-		<button onclick="login()">Envoyer</button>
-               
-               
-           
-    </body>
+		<div id="login_control">
+		   <input type="button" id="Envoyer" value="login" onclick="login();"/>			
+		</div>
+		
+	</form>             
+		               
+         </div>  
+         </body>
 	
 </html>
 
