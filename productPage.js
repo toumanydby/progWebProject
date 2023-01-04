@@ -28,57 +28,51 @@ class Product {
         return this.imageUrl;
     }
 }
-var productsList;
 
+var productsList;
 window.onload = function() {
     productsList = [];
     if(window.localStorage.getItem("productsList")){
         productsList = JSON.parse(window.localStorage.getItem("productsList")); // Retrieving
     }
-
-    console.log(productsList);
+    //console.log(productsList);
  }
-
-var ourListV2 = productsList;
 
 function saveProductsList() {
     window.localStorage.setItem("productsList", JSON.stringify(productsList));
-}
-
-function deleteAllProducts() {
-    productsList = [];
 }
 
 function createNewProduct() {
     let idProduct = productsList.length;
 
     // ON DOIT AVOIR UNE REFERENCE PAR PRODUIT. CORRIGE MOI CA BIEN TD
-/*     let productAlreadyExist = productsList.find(({ referenceP }) => referenceP === document.querySelector('#referenceP').value);
+    let productAlreadyExist = productsList.find(({ referenceP }) => referenceP === document.querySelector('#referenceP').value.trim());
     if (productAlreadyExist) {
-        let productExist = "Il existe un produit ayant la meme reference que celui que vous essayer de creer !! vueiller utiliser une autre reference pour creer un nouveau produit. <br> Vous trouverez les informations du produit en question ci dessous. <br><br>"
+        let productExist = "Il existe un produit ayant la meme reference que celui que vous essayer de creer !! veuiller utiliser une autre reference pour creer un nouveau produit."
             .concat("Nom du produit: ").concat(productAlreadyExist.nameP)
             .concat("\nQuantité en stock: ").concat(productAlreadyExist.quantityP)
             .concat("\nReference: ".concat(productAlreadyExist.referenceP));
         let varTextCreation = document.createElement('p');
         varTextCreation.textContent = productExist;
 
+        document.getElementById("modalBody").innerHTML = '';
         document.getElementById("modalBody").appendChild(varTextCreation);
         $('#myProductCreationModal').modal('show');
-        return
+        return;
     };
- */
+    
     let product = new Product(
         idProduct,
-        document.querySelector('#referenceP').value,
-        document.querySelector('#nameP').value,
-        document.querySelector('#quantityP').value,
-        document.querySelector('#imageUrl').value,
+        document.querySelector('#referenceP').value.trim(),
+        document.querySelector('#nameP').value.trim(),
+        document.querySelector('#quantityP').value.trim(),
+        document.querySelector('#imageUrl').value.trim(),
     );
 
     let text = "Votre produit ayant la référence "
-        .concat(document.querySelector('#referenceP').value)
+        .concat(document.querySelector('#referenceP').value.trim())
         .concat(" a bien été crée avec le nom : ")
-        .concat(document.querySelector('#nameP').value);
+        .concat(document.querySelector('#nameP').value.trim());
 
     let varTextCreation = document.createElement('p');
     varTextCreation.textContent = text;
@@ -87,16 +81,18 @@ function createNewProduct() {
     productsList.push(product);
     clearCreateNewProductForm();
     saveProductsList();
-    console.log(productsList);
+    //console.log(productsList);
+    $('#myProductCreationModal').modal({backdrop: 'static', keyboard: false})  
     $('#myProductCreationModal').modal('show');
 }
 
-function clearCreateNewProductForm() {
+/* function clearCreateNewProductForm() {
     document.querySelector('#referenceP').value = '';
     document.querySelector('#nameP').value = '';
     document.querySelector('#quantityP').value = '';
     document.querySelector('#imageUrl').value = '';
 }
+ */
 
 /**
  * 
@@ -111,6 +107,12 @@ function renderProductsList(inStock) {
 
     if (inStock === 0) {
         ourList = productsList.slice();
+        if (ourList.length === 0) {
+            let infoElt = document.createElement('p');
+            infoElt.setAttribute("class", 'noEltClass');
+            infoElt.textContent = "Il n'existe aucun article dans votre base de donnees. Vueillez en creer quelques uns"
+            productsDiv.appendChild(infoElt);
+        }
     } else {
         let compteurI = 0;
         let arrayLength = productsList.length;
@@ -130,15 +132,8 @@ function renderProductsList(inStock) {
         }
     }
 
-    ourListV2 = ourList;
-    console.log(productsList);
-    console.log(ourList);
-
-    //// For the render of all the product, we have to delete the create product form
-    //var createFormSection = document.querySelector("#createProductForm");
-    //createFormSection.parentNode.removeChild(createFormSection);
-
-    // NOW WE CAN BUILD OUR PRODUCTS DIV SECTION
+    //console.log(productsList);
+    //console.log(ourList);
 
     // A LOOP ON ALL THE PRODUCTS, TO CREATE THE DIV SECTION OF EACH PRODUCT 
     ourList.forEach((_produit, index) => {
@@ -170,16 +165,21 @@ function createProductDivInfos(_produit, productsDiv) {
 
 
     let btnEdit = document.createElement('button');
+    // btnEdit.setAttribute('id', 'btnForSelectActionElt'.concat(_produit.idProduct));
     btnEdit.setAttribute('class', 'btnEdit');
+
     btnEdit.setAttribute('id', 'btnEdit'.concat(_produit.idProduct));
     btnEdit.setAttribute('idproductedit', _produit.idProduct);
+
     btnEdit.textContent = "Edit";
 
     let btnDelete = document.createElement('button');
+    btnDelete.setAttribute('idproductdelete', _produit.idProduct);
     btnDelete.setAttribute('class', 'btnDelete');
     btnDelete.setAttribute('id', 'btnDelete'.concat(_produit.idProduct));
-    btnDelete.setAttribute('idproductdelete', _produit.idProduct);
+
     btnDelete.textContent = "Delete";
+
 
     let imageElement = document.createElement('img');
     imageElement.setAttribute("src", imageUrl);
@@ -195,12 +195,11 @@ function createProductDivInfos(_produit, productsDiv) {
     productsDiv.appendChild(divElement);
 
 }
+
 function deleteProduct(idProd) {
     let divSection = document.getElementById("product_".concat(idProd).concat("_div"));
     divSection.parentNode.removeChild(divSection);
-
     idToRemove = idProd;
-
     index = productsList.map(function (item) {
         return item.idProduct
     }).indexOf(idToRemove);
@@ -212,20 +211,11 @@ function deleteProduct(idProd) {
 
 function editProduct(idProduct) {
     // SOMETHING TO DO 
+    //saveProductsList();
 }
 
-
-/* function doSomethingFunc(idProduct) {
-    if (document.getElementById("actionPanelSelect".concat(idProduct))) {
-        if (document.getElementById("actionPanelSelect".concat(idProduct)).value === "delete") {
-            deleteProduct(idProduct);
-        } else if (document.getElementById("actionPanelSelect".concat(idProduct)).value === "edit")
-            editProduct(idProduct);
-    }
-} */
-
 function searchProduct() {
-    let refProductToFind = document.querySelector('#productToFindRef').value;
+    let refProductToFind = document.querySelector('#productToFindRef').value.trim();
     let product = productsList.find(({ referenceP }) => referenceP === refProductToFind);
     let productsDiv = deleteMainProductListDiv();
     
@@ -252,6 +242,7 @@ function deleteMainProductListDiv() {
 
     return productsDiv;
 }
+
 
 // EVENT LISTENER POUR LES DIFFERENTS BOUTONS DES PAGES 
 document.addEventListener('click', function (event) {
