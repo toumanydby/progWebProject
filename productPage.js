@@ -46,7 +46,7 @@ function createNewProduct() {
     let idProduct = productsList.length;
 
     // ON DOIT AVOIR UNE REFERENCE PAR PRODUIT. CORRIGE MOI CA BIEN TD
-    let productAlreadyExist = productsList.find(({ referenceP }) => referenceP === document.querySelector('#referenceP').value.trim());
+    let productAlreadyExist = productsList.find(({ referenceP }) => referenceP === document.querySelector('#referenceP').value);
     if (productAlreadyExist) {
         let productExist = "Il existe un produit ayant la meme reference que celui que vous essayer de creer !! veuiller utiliser une autre reference pour creer un nouveau produit."
             .concat("Nom du produit: ").concat(productAlreadyExist.nameP)
@@ -60,26 +60,29 @@ function createNewProduct() {
         $('#myProductCreationModal').modal('show');
         return;
     };
-    
+
+
     let product = new Product(
         idProduct,
-        document.querySelector('#referenceP').value.trim(),
-        document.querySelector('#nameP').value.trim(),
-        document.querySelector('#quantityP').value.trim(),
-        document.querySelector('#imageUrl').value.trim(),
+        document.querySelector('#referenceP').value,
+        document.querySelector('#nameP').value,
+        document.querySelector('#quantityP').value,
+        document.querySelector('#imageUrl').value,
     );
-
+        
     let text = "Votre produit ayant la référence "
-        .concat(document.querySelector('#referenceP').value.trim())
+        .concat(document.querySelector('#referenceP').value)
         .concat(" a bien été crée avec le nom : ")
-        .concat(document.querySelector('#nameP').value.trim());
+        .concat(document.querySelector('#nameP').value);
 
     let varTextCreation = document.createElement('p');
     varTextCreation.textContent = text;
 
     document.getElementById("modalBody").appendChild(varTextCreation);
+    alert(document.getElementById("modalBody"));
+
     productsList.push(product);
-    clearCreateNewProductForm();
+    //clearCreateNewProductForm();
     saveProductsList();
     //console.log(productsList);
     $('#myProductCreationModal').modal({backdrop: 'static', keyboard: false})  
@@ -206,7 +209,7 @@ function deleteProduct(idProd) {
 
     productsList.splice(index, 1);
     saveProductsList();
-    console.log(productsList);
+    //console.log(productsList);
 }
 
 function editProduct(idProduct) {
