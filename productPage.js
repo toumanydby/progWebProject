@@ -28,10 +28,16 @@ class Product {
         return this.imageUrl;
     }
 }
+var productsList;
 
+window.onload = function() {
+    productsList = [];
+    if(window.localStorage.getItem("productsList")){
+        productsList = JSON.parse(window.localStorage.getItem("productsList")); // Retrieving
+    }
 
-var productsList = JSON.parse(window.localStorage.getItem("productsList")); // Retrieving
-console.log(productsList);
+    console.log(productsList);
+ }
 
 var ourListV2 = productsList;
 
@@ -164,20 +170,16 @@ function createProductDivInfos(_produit, productsDiv) {
 
 
     let btnEdit = document.createElement('button');
-    // btnEdit.setAttribute('id', 'btnForSelectActionElt'.concat(_produit.idProduct));
     btnEdit.setAttribute('class', 'btnEdit');
     btnEdit.setAttribute('id', 'btnEdit'.concat(_produit.idProduct));
     btnEdit.setAttribute('idproductedit', _produit.idProduct);
-
     btnEdit.textContent = "Edit";
 
     let btnDelete = document.createElement('button');
-    btnDelete.setAttribute('idproductdelete', _produit.idProduct);
     btnDelete.setAttribute('class', 'btnDelete');
     btnDelete.setAttribute('id', 'btnDelete'.concat(_produit.idProduct));
-
+    btnDelete.setAttribute('idproductdelete', _produit.idProduct);
     btnDelete.textContent = "Delete";
-
 
     let imageElement = document.createElement('img');
     imageElement.setAttribute("src", imageUrl);
