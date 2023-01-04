@@ -79,8 +79,6 @@ function createNewProduct() {
     varTextCreation.textContent = text;
 
     document.getElementById("modalBody").appendChild(varTextCreation);
-    alert(document.getElementById("modalBody"));
-
     productsList.push(product);
     //clearCreateNewProductForm();
     saveProductsList();
