@@ -36,7 +36,7 @@ window.onload = function() {
         productsList = JSON.parse(window.localStorage.getItem("productsList")); // Retrieving
     }
     //console.log(productsList);
- }
+ };
 
 function saveProductsList() {
     window.localStorage.setItem("productsList", JSON.stringify(productsList));
@@ -59,8 +59,7 @@ function createNewProduct() {
         document.getElementById("modalBody").appendChild(varTextCreation);
         $('#myProductCreationModal').modal('show');
         return;
-    };
-
+    }
 
     let product = new Product(
         idProduct,
@@ -79,13 +78,11 @@ function createNewProduct() {
     varTextCreation.textContent = text;
 
     document.getElementById("modalBody").appendChild(varTextCreation);
-    alert(document.getElementById("modalBody"));
-
     productsList.push(product);
     //clearCreateNewProductForm();
     saveProductsList();
     //console.log(productsList);
-    $('#myProductCreationModal').modal({backdrop: 'static', keyboard: false})  
+    $('#myProductCreationModal').modal({backdrop: 'static', keyboard: false});  
     $('#myProductCreationModal').modal('show');
 }
 
@@ -113,14 +110,14 @@ function renderProductsList(inStock) {
         if (ourList.length === 0) {
             let infoElt = document.createElement('p');
             infoElt.setAttribute("class", 'noEltClass');
-            infoElt.textContent = "Il n'existe aucun article dans votre base de donnees. Vueillez en creer quelques uns"
+            infoElt.textContent = "Il n'existe aucun article dans votre base de donnees. Vueillez en creer quelques uns";
             productsDiv.appendChild(infoElt);
         }
     } else {
         let compteurI = 0;
         let arrayLength = productsList.length;
         while (compteurI < arrayLength) {
-            console.log(productsList[compteurI].quantityP)
+            //console.log(productsList[compteurI].quantityP);
             if (productsList[compteurI].quantityP < 1) {
                 ourList[ourList.length] = array[compteurI];
             }
@@ -130,7 +127,7 @@ function renderProductsList(inStock) {
         if (ourList.length === 0) {
             let infoElt = document.createElement('p');
             infoElt.setAttribute("class", 'noEltClass');
-            infoElt.textContent = "Il n'existe pas d'articles n'ayant pas de stock ! Tous les acticles peuvent etre vendus. :)"
+            infoElt.textContent = "Il n'existe pas d'articles n'ayant pas de stock ! Tous les acticles peuvent etre vendus. :)";
             productsDiv.appendChild(infoElt);
         }
     }
@@ -204,7 +201,7 @@ function deleteProduct(idProd) {
     divSection.parentNode.removeChild(divSection);
     idToRemove = idProd;
     index = productsList.map(function (item) {
-        return item.idProduct
+        return item.idProduct;
     }).indexOf(idToRemove);
 
     productsList.splice(index, 1);
@@ -245,7 +242,6 @@ function deleteMainProductListDiv() {
 
     return productsDiv;
 }
-
 
 // EVENT LISTENER POUR LES DIFFERENTS BOUTONS DES PAGES 
 document.addEventListener('click', function (event) {
