@@ -29,7 +29,10 @@ class Product {
     }
 }
 
+
 var productsList = JSON.parse(window.localStorage.getItem("productsList")); // Retrieving
+console.log(productsList);
+
 var ourListV2 = productsList;
 
 function saveProductsList() {
