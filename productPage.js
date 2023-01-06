@@ -98,7 +98,10 @@ function createNewProduct() {
  */
 function renderProductsList(inStock) {
     var productsDiv = deleteMainProductListDiv();
-    var tableP = productsDiv.firstChild;
+
+    if( document.getElementById('noEltHere')){
+        document.body.removeChild(document.getElementById("noEltHere"));
+    }
 
     let ourList = [];
 
@@ -106,10 +109,10 @@ function renderProductsList(inStock) {
         ourList = productsList.slice();
         if (ourList.length === 0) {
             let infoElt = document.createElement('p');
-            infoElt.setAttribute("class", 'noEltClass');
+            infoElt.setAttribute("id", 'noEltHere');
             infoElt.textContent = "Il n'existe aucun article dans votre base de donnees. Vueillez en creer quelques uns";
-            ///////////////////////// modifie productdiv create a new element
-            productsDiv.appendChild(infoElt);
+            document.body.removeChild(document.getElementById("ourProductsTable"));
+            document.body.appendChild(infoElt);
         }
     } else {
         let compteurI = 0;
@@ -124,16 +127,12 @@ function renderProductsList(inStock) {
 
         if (ourList.length === 0) {
             let infoElt = document.createElement('p');
-            infoElt.setAttribute("class", 'noEltClass');
+            infoElt.setAttribute("id", 'noEltHere');
             infoElt.textContent = "Il n'existe pas d'articles n'ayant pas de stock ! Tous les acticles peuvent etre vendus. :)";
-                        ///////////////////////// modifie productdiv create a new element
-
-            productsDiv.appendChild(infoElt);
+            document.body.removeChild(document.getElementById("ourProductsTable"));
+            document.body.appendChild(infoElt);
         }
     }
-
-    //console.log(productsList);
-    //console.log(ourList);
 
     // A LOOP ON ALL THE PRODUCTS, TO CREATE THE DIV SECTION OF EACH PRODUCT 
     ourList.forEach((_produit, index) => {
@@ -148,32 +147,33 @@ function createProductDivInfos(_produit, tableP) {
     let imageUrl = _produit.imageUrl;
     let referenceP = _produit.referenceP;
 
-
-
     let divElement = document.createElement('tr');
     divElement.setAttribute('id', productDivId); // and make sure myclass has some styles in css
 
     let refElement = document.createElement('td');
     refElement.setAttribute("class", "productReferenceClass");
     refElement.setAttribute('id', "productReferenceID_".concat(_produit.idProduct));
+    refElement.setAttribute('contenteditable', false);
+    
     refElement.textContent = referenceP;
 
     let nameElement = document.createElement('td');
     nameElement.setAttribute("class", "productNameClass");
     nameElement.setAttribute('id', "productNameID_".concat(_produit.idProduct));
     nameElement.textContent = nameP;
+    nameElement.setAttribute('contenteditable', false);
 
     let quantityElement = document.createElement('td');
     quantityElement.setAttribute("class", "productQuantityClass");
     quantityElement.setAttribute('id', "productQuantityID_".concat(_produit.idProduct));
     quantityElement.textContent = quantityP;
+    quantityElement.setAttribute('contenteditable', false);
 
     let butETd = document.createElement("td");
     let btnEdit = document.createElement('button');
     btnEdit.setAttribute('class', 'btnEdit');
     btnEdit.setAttribute('id', 'btnEdit'.concat(_produit.idProduct));
     btnEdit.setAttribute('idproductedit', _produit.idProduct);
-    //btnEdit.addEventListener("click", editProduct(_produit.idProduct));
     btnEdit.textContent = "Edit";
     butETd.appendChild(btnEdit);
 
@@ -193,6 +193,7 @@ function createProductDivInfos(_produit, tableP) {
     imageElement.setAttribute("width", "200px");
     imageElement.setAttribute("height", "200px");
     imageTd.appendChild(imageElement);
+    imageElement.setAttribute('contenteditable', false);
 
     divElement.appendChild(refElement);
     divElement.appendChild(nameElement);
@@ -216,35 +217,27 @@ function deleteProduct(idProd) {
     //console.log(productsList);
 }
 
-
-function editProduct(idProduct) {
-    $("tr>td:first-child").each(function (index, element) {
-        $(this).html(index + 1)
-    })
-
-    ListElement = [];
-
-    $(".btnEdit").click(function () {
-        var $tds = $(this).parents("tr").children("td").filter(":lt(4)");
-        var $content = $(this).html();
-        if ($content == "Edit") {
-            $tds.each(function () {
-                $(this).html("<input type='text' value='" + $(this).html() + "'>")
-            });
-            $(this).html("Save")
-        } else {
-            $tds.each(function () {
-                var contentIn = $(this).children("input").val()
-                $(this).html(contentIn);
-                ListElement.push(contentIn);
-            });
-            $(this).html("Edit");
-        }
+function editProduct(idProduct){
+    newlist=[];
+    var elements  = document.getElementById("product_".concat(idProduct).concat("_div")).getElementsByTagName("td");
+    let element=elements[2];
+    var oldhtml = element.innerHTML;
+    if (oldhtml == null || oldhtml.length == 0) {
+        return alert("Vide!");
     }
 
-    )
-    saveProductsList();
-}
+    var newInput = document.createElement('input');
+    newInput.type = 'text';
+    newInput.value = oldhtml;
+    newInput.onblur = function() {
+      element.innerHTML = this.value == oldhtml ? oldhtml : this.value;
+    }
+
+    element.innerHTML = '';
+    element.appendChild(newInput);
+    newInput.setSelectionRange(0, oldhtml.length);
+    newInput.focus();
+  }
 
 function searchProduct() {
     let refProductToFind = document.querySelector('#productToFindRef').value.trim();
@@ -263,17 +256,14 @@ function searchProduct() {
 }
 
 function deleteMainProductListDiv() {
-    let ourMainProductDiv = document.getElementById("productsDiv");
+    let ourMainProductDiv = document.getElementById("ourProductsTable");
+
     if (ourMainProductDiv) {
-        ourMainProductDiv.parentNode.removeChild(ourMainProductDiv);
+        document.body.removeChild(ourMainProductDiv);
     }
 
-/*     var productsDiv = document.createElement('p');
-    productsDiv.setAttribute('id', 'productsDiv');
-    document.body.appendChild(productsDiv);
- */
-
     const tbl = document.createElement("table");
+    tbl.setAttribute('id','ourProductsTable');
     document.body.appendChild(tbl);
     const tblHead = document.createElement("thead");
     const tbody = document.createElement("tbody");
@@ -318,4 +308,58 @@ document.addEventListener('click', function (event) {
     if (event.target.classList[0] == 'btnDelete') {
         deleteProduct(event.target.getAttribute("idproductdelete"));
     };
+
+    if (event.target.classList[0] == 'btnEdit') {
+        editProduct5(event.target.getAttribute("idproductedit"));
+    };
 });
+
+
+
+function editProduct5(idProduct){
+    var currentTR = document.getElementById("product_".concat(idProduct).concat("_div"));
+    var tdElements = currentTR.getElementsByTagName('td');
+    //console.log(tdElements);
+    var btnEditClicked = document.getElementById("btnEdit".concat(idProduct));
+    if(btnEditClicked.textContent === 'Edit'){
+        for (let index = 0; index < 3; index++) {
+            let element = tdElements[index];
+            element.setAttribute("contenteditable", true);
+        }
+    }
+    else{
+        for (let index = 0; index < 3; index++) {
+            let element = tdElements[index];
+            element.setAttribute("contenteditable", false);
+        }
+    }
+
+    if(btnEditClicked.textContent === "Edit"){
+        btnEditClicked.textContent = "Save";
+    } else{
+        btnEditClicked.textContent = "Edit";
+    }
+
+    let newReference = document.getElementById("productReferenceID_".concat(idProduct)).textContent;
+    let newName = document.getElementById("productNameID_".concat(idProduct)).textContent;
+    let newQuantity = document.getElementById("productQuantityID_".concat(idProduct)).textContent;
+    let newUrlImg = document.getElementById("productImageID_".concat(idProduct)).getAttribute("src");
+
+    idToRemove = idProduct;
+    index = productsList.map(function (item) {
+        return item.idProduct;
+    }).indexOf(idToRemove);
+
+    productsList.splice(index, 1);
+    
+    let newProduct = new Product(
+        idProduct,
+        newReference,
+        newName,
+        newQuantity,
+        newUrlImg
+    );
+    productsList.push(newProduct);
+
+    saveProductsList();
+}
