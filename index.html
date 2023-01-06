@@ -28,11 +28,14 @@
 
 		</form>
 		<script type="text/javascript">
-			function getData() {
 				var searchUrl = window.location.href;
 				var searchData = searchUrl.split("=");
 				var searchText = decodeURI(searchData[1]);
 				var searchText1 = decodeURI(searchData[2]);
+				console.log(searchText);
+				console.log(searchText1);
+
+
 				if (searchText == "undefined") {
 					document.getElementById("username").value = '';
 				}
@@ -43,7 +46,6 @@
 					document.getElementById("password").value = searchText1;
 				}
 
-			}
 		</script>
 	</div>
 </body>
