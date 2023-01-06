@@ -320,6 +320,7 @@ function editProduct(idProduct){
 
 /**
  * Fonction de recherche de produit en utilisant la reference du produit qui est unique pour chaque produit
+ * @param {int} role 
  */
 function searchProduct(role) {
     let refProductToFind = document.querySelector('#productToFindRef').value.trim();
@@ -337,6 +338,12 @@ function searchProduct(role) {
     }
 }
 
+
+/**
+ * Supprime la table des produits et tout son contenu et en cree une nouvelle qui est vide
+ * @param {int} role 
+ * @returns the body of the table we create
+ */
 function deleteMainProductListDiv(role) {
 
     let ourMainProductDiv = document.getElementById("ourProductsTable");
