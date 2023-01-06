@@ -33,7 +33,7 @@ var productsList;
 window.onload = function () {
     let p1 = new Product(0, "459340", "Nike Air Force 1 '07", 5, "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/b7d9211c-26e7-431a-ac24-b0540fb3c00f/chaussure-air-force-1-07-pour-GjGXSP.png");
     let p2 = new Product(1, "793273", "Nike Air Max Plus 3 Leather", 7, "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/d353fda3-e930-45fe-8a5a-4c865e8ebe89/chaussure-air-max-plus-3-leather-pour-m0Vpt4.png");
-    let p3 = new Product(3, "013792", "Nike Vaporfly NEXT% 2", 2, "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/d887ad59-dd77-425a-afa0-00666e311710/chaussure-de-course-sur-route-vaporfly-next-2-pour-821S4F.png");
+    let p3 = new Product(2, "013792", "Nike Vaporfly NEXT% 2", 2, "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/d887ad59-dd77-425a-afa0-00666e311710/chaussure-de-course-sur-route-vaporfly-next-2-pour-821S4F.png");
 
     productsList = [p1, p2, p3];
     if (window.localStorage.getItem("productsList")) {
@@ -120,7 +120,7 @@ function renderProductsList(inStock) {
         while (compteurI < arrayLength) {
             //console.log(productsList[compteurI].quantityP);
             if (productsList[compteurI].quantityP < 1) {
-                ourList[ourList.length] = array[compteurI];
+                ourList[ourList.length] = productsList[compteurI];
             }
             compteurI++;
         }
@@ -138,6 +138,8 @@ function renderProductsList(inStock) {
     ourList.forEach((_produit, index) => {
         createProductDivInfos(_produit, productsDiv);
     });
+    console.log(productsList);
+
 }
 
 function createProductDivInfos(_produit, tableP) {
@@ -345,7 +347,7 @@ function editProduct5(idProduct){
     let newQuantity = document.getElementById("productQuantityID_".concat(idProduct)).textContent;
     let newUrlImg = document.getElementById("productImageID_".concat(idProduct)).getAttribute("src");
 
-    idToRemove = idProduct;
+    idToRemove = parseInt(idProduct);
     index = productsList.map(function (item) {
         return item.idProduct;
     }).indexOf(idToRemove);
@@ -353,13 +355,13 @@ function editProduct5(idProduct){
     productsList.splice(index, 1);
     
     let newProduct = new Product(
-        idProduct,
+        parseInt(idProduct),
         newReference,
         newName,
         newQuantity,
         newUrlImg
     );
     productsList.push(newProduct);
-
+    console.log(productsList);
     saveProductsList();
 }
