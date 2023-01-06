@@ -50,15 +50,12 @@
                         Products List
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <button class="dropdown-item" onclick="renderProductsList(0,0)">Afficher tous les produits</button>
-                        <button class="dropdown-item" onclick="renderProductsList(1,0)">Afficher les produits n'ayant plus de stock</button>
+                        <button class="dropdown-item" onclick="renderProductsList(0,1)">Afficher tous les produits</button>
+                        <button class="dropdown-item" onclick="renderProductsList(1,1)">Afficher les produits n'ayant plus de stock</button>
                     </div>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="addProduct.html">Add Product<span class="sr-only">(current)</span></a>
-                </li>
             </ul>  
-            <form class="form-inline my-2 my-lg-0" id="searchForm" onsubmit="searchProduct(); return false;">
+            <form class="form-inline my-2 my-lg-0" id="searchForm" onsubmit="searchProduct(1); return false;">
                 <input class="form-control mr-sm-2" type="search" id="productToFindRef" placeholder="Search" aria-label="Search" required>
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>
