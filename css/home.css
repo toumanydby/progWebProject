@@ -78,7 +78,7 @@ header .container ul a {
   .sec1{
     height: 100vh;
     width: 100%;
-    background-image: url(images/13.png) ;
+    background-image: url(../images/13.png) ;
     background-repeat: no-repeat ;
     background-position: top right ;
     
@@ -109,7 +109,7 @@ header .container ul a {
 
 
 
-.sec1 button, .mesbuttons{
+.sec1 button{
  position: relative;
  height: 70px;
  width: 250px;
@@ -123,11 +123,11 @@ header .container ul a {
  overflow: hidden;
 
 }
-.sec1 button:hover, .mesbuttons:hover {
+.sec1 button:hover {
     color: white;
     width: 280px; ;
 }
-.sec1 button::before .mesbuttons::before{
+.sec1 button::before{
 
     content: "";
     position: absolute;
@@ -142,7 +142,7 @@ header .container ul a {
     z-index: -1;
 
 }
-.sec1 button:hover::before .mesbuttons:hover::before {
+.sec1 button:hover::before {
     transform: translate(0%);
 }
 .sec1 button i {
