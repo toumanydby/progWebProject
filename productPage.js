@@ -173,7 +173,7 @@ function createProductDivInfos(_produit, tableP) {
     btnEdit.setAttribute('class', 'btnEdit');
     btnEdit.setAttribute('id', 'btnEdit'.concat(_produit.idProduct));
     btnEdit.setAttribute('idproductedit', _produit.idProduct);
-    btnEdit.addEventListener("click", editProduct(_produit.idProduct));
+    //btnEdit.addEventListener("click", editProduct(_produit.idProduct));
     btnEdit.textContent = "Edit";
     butETd.appendChild(btnEdit);
 
