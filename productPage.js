@@ -97,7 +97,7 @@ function createNewProduct() {
  * inStock = 1 true
  */
 function renderProductsList(inStock,role) {
-    var productsDiv = deleteMainProductListDiv();
+    var productsDiv = deleteMainProductListDiv(role);
 
     if( document.getElementById('noEltHere')){
         document.body.removeChild(document.getElementById("noEltHere"));
@@ -136,11 +136,13 @@ function renderProductsList(inStock,role) {
 
     // A LOOP ON ALL THE PRODUCTS, TO CREATE THE DIV SECTION OF EACH PRODUCT 
     ourList.forEach((_produit, index) => {
-        createProductDivInfos(_produit, productsDiv);
+        createProductDivInfos(_produit, productsDiv,role);
     });
     console.log(productsList);
 
 }
+
+
 
 function createProductDivInfos(_produit, tableP,role) {
     let productDivId = "product_".concat(_produit.idProduct).concat("_div");
@@ -171,6 +173,21 @@ function createProductDivInfos(_produit, tableP,role) {
     quantityElement.textContent = quantityP;
     quantityElement.setAttribute('contenteditable', false);
 
+    let imageTd = document.createElement("td");
+    let imageElement = document.createElement('img');
+    imageElement.setAttribute("src", imageUrl);
+    imageElement.setAttribute("class", "productImageClass");
+    imageElement.setAttribute('id', "productImageID_".concat(_produit.idProduct));
+    imageElement.setAttribute("width", "200px");
+    imageElement.setAttribute("height", "200px");
+    imageTd.appendChild(imageElement);
+    imageElement.setAttribute('contenteditable', false);
+
+    divElement.appendChild(refElement);
+    divElement.appendChild(nameElement);
+    divElement.appendChild(quantityElement);
+    divElement.appendChild(imageTd);
+
     //only for admins
 
     if(role===0){
@@ -189,27 +206,10 @@ function createProductDivInfos(_produit, tableP,role) {
     btnDelete.setAttribute('id', 'btnDelete'.concat(_produit.idProduct));
     btnDelete.textContent = "Delete";
     butDTd.appendChild(btnDelete);
-}
-
-    let imageTd = document.createElement("td");
-    let imageElement = document.createElement('img');
-    imageElement.setAttribute("src", imageUrl);
-    imageElement.setAttribute("class", "productImageClass");
-    imageElement.setAttribute('id', "productImageID_".concat(_produit.idProduct));
-    imageElement.setAttribute("width", "200px");
-    imageElement.setAttribute("height", "200px");
-    imageTd.appendChild(imageElement);
-    imageElement.setAttribute('contenteditable', false);
-
-    divElement.appendChild(refElement);
-    divElement.appendChild(nameElement);
-    divElement.appendChild(quantityElement);
-    divElement.appendChild(imageTd);
-    //only for admins
-    if(role===0){
     divElement.appendChild(butETd);
     divElement.appendChild(butDTd);
 }
+
     tableP.appendChild(divElement);
 }
 
@@ -254,7 +254,7 @@ function searchProduct(role) {
     let productsDiv = deleteMainProductListDiv(role);
 
     if (product) {
-        createProductDivInfos(product, productsDiv);
+        createProductDivInfos(product, productsDiv,role);
     } else {
         pElt = document.createElement('p');
         pElt.setAttribute('class', 'productNotFoundClass');
@@ -265,7 +265,10 @@ function searchProduct(role) {
 }
 
 function deleteMainProductListDiv(role) {
+
     let ourMainProductDiv = document.getElementById("ourProductsTable");
+    console.log("delete");
+          console.log(role===0);
 
     if (ourMainProductDiv) {
         document.body.removeChild(ourMainProductDiv);
@@ -285,35 +288,38 @@ function deleteMainProductListDiv(role) {
     const cellTextQ = document.createTextNode("Quantity");
     const cellI = document.createElement("th");
     const cellButtonImage = document.createTextNode("Image");
-    if(role===0){
-    const cellbtE = document.createElement("th");
-    const cellButtonE = document.createTextNode("Button Edit");
-    const cellbtD = document.createElement("th");
-    const cellButtonD = document.createTextNode("Button Delete");
-}
+
     cellR.appendChild(cellTextR);
     cellN.appendChild(cellTextN);
     cellQ.appendChild(cellTextQ);
     cellI.appendChild(cellButtonImage);
-    if(role===0){
-    cellbtE.appendChild(cellButtonE);
-    cellbtD.appendChild(cellButtonD);
-}
 
     row.appendChild(cellR);
     row.appendChild(cellN);
     row.appendChild(cellQ);
     row.appendChild(cellI);
+
+
     if(role===0){
+    const cellbtE = document.createElement("th");
+    const cellButtonE = document.createTextNode("Button Edit");
+    const cellbtD = document.createElement("th");
+    const cellButtonD = document.createTextNode("Button Delete");
+    cellbtE.appendChild(cellButtonE);
+    cellbtD.appendChild(cellButtonD);
     row.appendChild(cellbtE);
     row.appendChild(cellbtD);
 }
+
+
     tblHead.appendChild(row);
     tbl.appendChild(tblHead);
     tbl.appendChild(tbody);
 
     return tbody;
 }
+
+
 
 // EVENT LISTENER POUR LES DIFFERENTS BOUTONS DES PAGES 
 document.addEventListener('click', function (event) {
