@@ -96,7 +96,7 @@ function createNewProduct() {
  * inStock = 0 false
  * inStock = 1 true
  */
-function renderProductsList(inStock) {
+function renderProductsList(inStock,role) {
     var productsDiv = deleteMainProductListDiv();
 
     if( document.getElementById('noEltHere')){
@@ -142,7 +142,7 @@ function renderProductsList(inStock) {
 
 }
 
-function createProductDivInfos(_produit, tableP) {
+function createProductDivInfos(_produit, tableP,role) {
     let productDivId = "product_".concat(_produit.idProduct).concat("_div");
     let nameP = _produit.nameP;
     let quantityP = _produit.quantityP;
@@ -171,6 +171,9 @@ function createProductDivInfos(_produit, tableP) {
     quantityElement.textContent = quantityP;
     quantityElement.setAttribute('contenteditable', false);
 
+    //only for admins
+
+    if(role===0){
     let butETd = document.createElement("td");
     let btnEdit = document.createElement('button');
     btnEdit.setAttribute('class', 'btnEdit');
@@ -186,6 +189,7 @@ function createProductDivInfos(_produit, tableP) {
     btnDelete.setAttribute('id', 'btnDelete'.concat(_produit.idProduct));
     btnDelete.textContent = "Delete";
     butDTd.appendChild(btnDelete);
+}
 
     let imageTd = document.createElement("td");
     let imageElement = document.createElement('img');
@@ -201,8 +205,11 @@ function createProductDivInfos(_produit, tableP) {
     divElement.appendChild(nameElement);
     divElement.appendChild(quantityElement);
     divElement.appendChild(imageTd);
+    //only for admins
+    if(role===0){
     divElement.appendChild(butETd);
     divElement.appendChild(butDTd);
+}
     tableP.appendChild(divElement);
 }
 
@@ -241,10 +248,10 @@ function editProduct(idProduct){
     newInput.focus();
   }
 
-function searchProduct() {
+function searchProduct(role) {
     let refProductToFind = document.querySelector('#productToFindRef').value.trim();
     let product = productsList.find(({ referenceP }) => referenceP === refProductToFind);
-    let productsDiv = deleteMainProductListDiv();
+    let productsDiv = deleteMainProductListDiv(role);
 
     if (product) {
         createProductDivInfos(product, productsDiv);
@@ -257,7 +264,7 @@ function searchProduct() {
     }
 }
 
-function deleteMainProductListDiv() {
+function deleteMainProductListDiv(role) {
     let ourMainProductDiv = document.getElementById("ourProductsTable");
 
     if (ourMainProductDiv) {
@@ -278,25 +285,29 @@ function deleteMainProductListDiv() {
     const cellTextQ = document.createTextNode("Quantity");
     const cellI = document.createElement("th");
     const cellButtonImage = document.createTextNode("Image");
+    if(role===0){
     const cellbtE = document.createElement("th");
     const cellButtonE = document.createTextNode("Button Edit");
     const cellbtD = document.createElement("th");
     const cellButtonD = document.createTextNode("Button Delete");
-
+}
     cellR.appendChild(cellTextR);
     cellN.appendChild(cellTextN);
     cellQ.appendChild(cellTextQ);
     cellI.appendChild(cellButtonImage);
+    if(role===0){
     cellbtE.appendChild(cellButtonE);
     cellbtD.appendChild(cellButtonD);
+}
 
     row.appendChild(cellR);
     row.appendChild(cellN);
     row.appendChild(cellQ);
     row.appendChild(cellI);
+    if(role===0){
     row.appendChild(cellbtE);
     row.appendChild(cellbtD);
-
+}
     tblHead.appendChild(row);
     tbl.appendChild(tblHead);
     tbl.appendChild(tbody);
