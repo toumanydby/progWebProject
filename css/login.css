@@ -45,8 +45,16 @@ form p > * {
     border-bottom-left-radius: 5px;
 }
 
-.text_field {
+.text_field{
     width: 215px;
+    height: 28px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border: 0;
+}
+
+.text_field_mdp {
+    width: 180px;
     height: 28px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
