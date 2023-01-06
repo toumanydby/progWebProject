@@ -30,13 +30,17 @@ class Product {
 }
 
 var productsList;
-window.onload = function() {
-    productsList = [];
-    if(window.localStorage.getItem("productsList")){
+window.onload = function () {
+    let p1 = new Product(0, "459340", "Nike Air Force 1 '07", 5, "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/b7d9211c-26e7-431a-ac24-b0540fb3c00f/chaussure-air-force-1-07-pour-GjGXSP.png");
+    let p2 = new Product(1, "793273", "Nike Air Max Plus 3 Leather", 7, "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/d353fda3-e930-45fe-8a5a-4c865e8ebe89/chaussure-air-max-plus-3-leather-pour-m0Vpt4.png");
+    let p3 = new Product(3, "013792", "Nike Vaporfly NEXT% 2", 2, "https://static.nike.com/a/images/t_PDP_864_v1/f_auto,b_rgb:f5f5f5/d887ad59-dd77-425a-afa0-00666e311710/chaussure-de-course-sur-route-vaporfly-next-2-pour-821S4F.png");
+
+    productsList = [p1, p2, p3];
+    if (window.localStorage.getItem("productsList")) {
         productsList = JSON.parse(window.localStorage.getItem("productsList")); // Retrieving
     }
     //console.log(productsList);
- };
+};
 
 function saveProductsList() {
     window.localStorage.setItem("productsList", JSON.stringify(productsList));
@@ -68,7 +72,7 @@ function createNewProduct() {
         document.querySelector('#quantityP').value,
         document.querySelector('#imageUrl').value,
     );
-        
+
     let text = "Votre produit ayant la référence "
         .concat(document.querySelector('#referenceP').value)
         .concat(" a bien été crée avec le nom : ")
@@ -82,17 +86,9 @@ function createNewProduct() {
     //clearCreateNewProductForm();
     saveProductsList();
     //console.log(productsList);
-    $('#myProductCreationModal').modal({backdrop: 'static', keyboard: false});  
+    $('#myProductCreationModal').modal({ backdrop: 'static', keyboard: false });
     $('#myProductCreationModal').modal('show');
 }
-
-/* function clearCreateNewProductForm() {
-    document.querySelector('#referenceP').value = '';
-    document.querySelector('#nameP').value = '';
-    document.querySelector('#quantityP').value = '';
-    document.querySelector('#imageUrl').value = '';
-}
- */
 
 /**
  * 
@@ -102,7 +98,7 @@ function createNewProduct() {
  */
 function renderProductsList(inStock) {
     var productsDiv = deleteMainProductListDiv();
-    var tableP=productsDiv.firstChild;
+    var tableP = productsDiv.firstChild;
 
     let ourList = [];
 
@@ -112,6 +108,7 @@ function renderProductsList(inStock) {
             let infoElt = document.createElement('p');
             infoElt.setAttribute("class", 'noEltClass');
             infoElt.textContent = "Il n'existe aucun article dans votre base de donnees. Vueillez en creer quelques uns";
+            ///////////////////////// modifie productdiv create a new element
             productsDiv.appendChild(infoElt);
         }
     } else {
@@ -129,6 +126,8 @@ function renderProductsList(inStock) {
             let infoElt = document.createElement('p');
             infoElt.setAttribute("class", 'noEltClass');
             infoElt.textContent = "Il n'existe pas d'articles n'ayant pas de stock ! Tous les acticles peuvent etre vendus. :)";
+                        ///////////////////////// modifie productdiv create a new element
+
             productsDiv.appendChild(infoElt);
         }
     }
@@ -138,7 +137,7 @@ function renderProductsList(inStock) {
 
     // A LOOP ON ALL THE PRODUCTS, TO CREATE THE DIV SECTION OF EACH PRODUCT 
     ourList.forEach((_produit, index) => {
-        createProductDivInfos(_produit, tableP);
+        createProductDivInfos(_produit, productsDiv);
     });
 }
 
@@ -149,7 +148,6 @@ function createProductDivInfos(_produit, tableP) {
     let imageUrl = _produit.imageUrl;
     let referenceP = _produit.referenceP;
 
-   const tblBody = document.createElement("tbody");
 
 
     let divElement = document.createElement('tr');
@@ -170,9 +168,8 @@ function createProductDivInfos(_produit, tableP) {
     quantityElement.setAttribute('id', "productQuantityID_".concat(_produit.idProduct));
     quantityElement.textContent = quantityP;
 
-    let butETd=document.createElement("td");
+    let butETd = document.createElement("td");
     let btnEdit = document.createElement('button');
-    // btnEdit.setAttribute('id', 'btnForSelectActionElt'.concat(_produit.idProduct));
     btnEdit.setAttribute('class', 'btnEdit');
     btnEdit.setAttribute('id', 'btnEdit'.concat(_produit.idProduct));
     btnEdit.setAttribute('idproductedit', _produit.idProduct);
@@ -180,7 +177,7 @@ function createProductDivInfos(_produit, tableP) {
     btnEdit.textContent = "Edit";
     butETd.appendChild(btnEdit);
 
-    let butDTd=document.createElement("td");
+    let butDTd = document.createElement("td");
     let btnDelete = document.createElement('button');
     btnDelete.setAttribute('idproductdelete', _produit.idProduct);
     btnDelete.setAttribute('class', 'btnDelete');
@@ -188,7 +185,7 @@ function createProductDivInfos(_produit, tableP) {
     btnDelete.textContent = "Delete";
     butDTd.appendChild(btnDelete);
 
-    let imageTd=document.createElement("td");
+    let imageTd = document.createElement("td");
     let imageElement = document.createElement('img');
     imageElement.setAttribute("src", imageUrl);
     imageElement.setAttribute("class", "productImageClass");
@@ -197,16 +194,13 @@ function createProductDivInfos(_produit, tableP) {
     imageElement.setAttribute("height", "200px");
     imageTd.appendChild(imageElement);
 
-
     divElement.appendChild(refElement);
     divElement.appendChild(nameElement);
     divElement.appendChild(quantityElement);
     divElement.appendChild(imageTd);
     divElement.appendChild(butETd);
     divElement.appendChild(butDTd);
-    tblBody.appendChild(divElement);
-    tableP.appendChild(tblBody);
-
+    tableP.appendChild(divElement);
 }
 
 function deleteProduct(idProd) {
@@ -222,53 +216,46 @@ function deleteProduct(idProd) {
     //console.log(productsList);
 }
 
+
 function editProduct(idProduct) {
-    $("tr>td:first-child").each(function(index,element){
-        $(this).html(index+1)
+    $("tr>td:first-child").each(function (index, element) {
+        $(this).html(index + 1)
     })
-    
-    ListElement=[];
 
-     $(".btnEdit").click(function(){
-    var $tds = $(this).parents("tr").children("td").filter(":lt(4)");
-    var $content = $(this).html();
-    if ($content=="Edit") {   
-        $tds.each(function(){
-            $(this).html("<input type='text' value='"+$(this).html()+"'>")
-        });
-        $(this).html("Save")
-    }else{
-        $tds.each(function(){
-            var contentIn= $(this).children("input").val()
-            $(this).html(contentIn);
-            ListElement.push(contentIn);
-        });
-        $(this).html("Edit");     
+    ListElement = [];
+
+    $(".btnEdit").click(function () {
+        var $tds = $(this).parents("tr").children("td").filter(":lt(4)");
+        var $content = $(this).html();
+        if ($content == "Edit") {
+            $tds.each(function () {
+                $(this).html("<input type='text' value='" + $(this).html() + "'>")
+            });
+            $(this).html("Save")
+        } else {
+            $tds.each(function () {
+                var contentIn = $(this).children("input").val()
+                $(this).html(contentIn);
+                ListElement.push(contentIn);
+            });
+            $(this).html("Edit");
+        }
     }
-}
 
-)
-   
-
-
-
-        
-
+    )
     saveProductsList();
 }
-
-
 
 function searchProduct() {
     let refProductToFind = document.querySelector('#productToFindRef').value.trim();
     let product = productsList.find(({ referenceP }) => referenceP === refProductToFind);
     let productsDiv = deleteMainProductListDiv();
-    
-    if(product){
+
+    if (product) {
         createProductDivInfos(product, productsDiv);
-    } else{
+    } else {
         pElt = document.createElement('p');
-        pElt.setAttribute('class','productNotFoundClass');
+        pElt.setAttribute('class', 'productNotFoundClass');
         pElt.textContent = "Aucun produit n'a la reference suivante: ".concat(refProductToFind);
 
         productsDiv.appendChild(pElt);
@@ -281,12 +268,15 @@ function deleteMainProductListDiv() {
         ourMainProductDiv.parentNode.removeChild(ourMainProductDiv);
     }
 
-    var productsDiv = document.createElement('p');
+/*     var productsDiv = document.createElement('p');
     productsDiv.setAttribute('id', 'productsDiv');
     document.body.appendChild(productsDiv);
+ */
 
     const tbl = document.createElement("table");
+    document.body.appendChild(tbl);
     const tblHead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
     const row = document.createElement("tr");
     const cellR = document.createElement("th");
     const cellTextR = document.createTextNode("Reference");
@@ -317,11 +307,9 @@ function deleteMainProductListDiv() {
 
     tblHead.appendChild(row);
     tbl.appendChild(tblHead);
-    
-    productsDiv.appendChild(tbl);
+    tbl.appendChild(tbody);
 
-
-    return productsDiv;
+    return tbody;
 }
 
 // EVENT LISTENER POUR LES DIFFERENTS BOUTONS DES PAGES 
