@@ -19,11 +19,11 @@ class User{
 }
 
 
-const u1 = new User('test1', 'test1', 'ADMIN');
-const u2 = new User('test2', 'test2', 'ADMIN');
-const u3 = new User('test3', 'test3', 'USER');
-const u4 = new User('test4', 'test4', 'USER');
-const u5 = new User('test5', 'test5', 'USER');
+const u1 = new User('test1', 'mdptest1', 'ADMIN');
+const u2 = new User('test2', 'mdptest2', 'ADMIN');
+const u3 = new User('test3', 'mdptest3', 'USER');
+const u4 = new User('test4', 'mdptest4', 'USER');
+const u5 = new User('test5', 'mdptest5', 'USER');
 let users=new Array(u1,u2,u3,u4,u5);
 
 
@@ -41,6 +41,7 @@ function distruiberPage(pfId,pfMdp){
         else{
         if(result.getRoleUser()=="ADMIN"){
         location.href="./home_Admin.html";
+
         }
         if(result.getRoleUser()=="USER"){
         location.href="./home_User.html";
@@ -52,9 +53,41 @@ function distruiberPage(pfId,pfMdp){
 
 
 function login(){
-	var login=document.getElementById("idUser").value;
-	var mdp=document.getElementById("mdpUser").value;
-
+	var login=document.getElementById("username").value;
+	var mdp=document.getElementById("password").value;
 	distruiberPage(login,mdp);
 }
+
+function forget(){
+    name=document.getElementById("username").value;
+    url = "forget_pwd.html?name="+name;
+    window.location.href = url;
+}
+
+function submit1(name) {
+    const result = users.find(({ idU }) => idU === name);
+     if(typeof result =='undefined'){
+        alert("user not exists!");
+    }
+    else{
+        var mdpU=result.getMdpUser();
+        url="login.html?name="+name+"&mdp="+mdpU;
+        window.location.href=url;
+    }
+
+}
+
+ function hideMdp() {
+    var Img = document.getElementById("imageShow");
+    var mdp = document.getElementById("password");
+        if (mdp.type == "password") {
+            mdp.type = "text";
+            Img.src ="./images/show.png";
+        } else {
+            mdp.type = "password";
+            Img.src = "./images/hide.png";
+        }
+    }
+
+
 

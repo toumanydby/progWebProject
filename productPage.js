@@ -102,6 +102,7 @@ function createNewProduct() {
  */
 function renderProductsList(inStock) {
     var productsDiv = deleteMainProductListDiv();
+    var tableP=productsDiv.firstChild;
 
     let ourList = [];
 
@@ -137,62 +138,74 @@ function renderProductsList(inStock) {
 
     // A LOOP ON ALL THE PRODUCTS, TO CREATE THE DIV SECTION OF EACH PRODUCT 
     ourList.forEach((_produit, index) => {
-        createProductDivInfos(_produit, productsDiv);
+        createProductDivInfos(_produit, tableP);
     });
 }
 
-function createProductDivInfos(_produit, productsDiv) {
+function createProductDivInfos(_produit, tableP) {
     let productDivId = "product_".concat(_produit.idProduct).concat("_div");
     let nameP = _produit.nameP;
     let quantityP = _produit.quantityP;
     let imageUrl = _produit.imageUrl;
     let referenceP = _produit.referenceP;
 
-    let divElement = document.createElement('div');
+   const tblBody = document.createElement("tbody");
+
+
+    let divElement = document.createElement('tr');
     divElement.setAttribute('id', productDivId); // and make sure myclass has some styles in css
 
-    let refElement = document.createElement('p');
+    let refElement = document.createElement('td');
     refElement.setAttribute("class", "productReferenceClass");
+    refElement.setAttribute('id', "productReferenceID_".concat(_produit.idProduct));
     refElement.textContent = referenceP;
 
-    let nameElement = document.createElement('p');
+    let nameElement = document.createElement('td');
     nameElement.setAttribute("class", "productNameClass");
+    nameElement.setAttribute('id', "productNameID_".concat(_produit.idProduct));
     nameElement.textContent = nameP;
 
-    let quantityElement = document.createElement('p');
+    let quantityElement = document.createElement('td');
     quantityElement.setAttribute("class", "productQuantityClass");
+    quantityElement.setAttribute('id', "productQuantityID_".concat(_produit.idProduct));
     quantityElement.textContent = quantityP;
 
-
+    let butETd=document.createElement("td");
     let btnEdit = document.createElement('button');
     // btnEdit.setAttribute('id', 'btnForSelectActionElt'.concat(_produit.idProduct));
     btnEdit.setAttribute('class', 'btnEdit');
-
     btnEdit.setAttribute('id', 'btnEdit'.concat(_produit.idProduct));
     btnEdit.setAttribute('idproductedit', _produit.idProduct);
-
+    btnEdit.addEventListener("click", editProduct(_produit.idProduct));
     btnEdit.textContent = "Edit";
+    butETd.appendChild(btnEdit);
 
+    let butDTd=document.createElement("td");
     let btnDelete = document.createElement('button');
     btnDelete.setAttribute('idproductdelete', _produit.idProduct);
     btnDelete.setAttribute('class', 'btnDelete');
     btnDelete.setAttribute('id', 'btnDelete'.concat(_produit.idProduct));
-
     btnDelete.textContent = "Delete";
+    butDTd.appendChild(btnDelete);
 
-
+    let imageTd=document.createElement("td");
     let imageElement = document.createElement('img');
     imageElement.setAttribute("src", imageUrl);
     imageElement.setAttribute("class", "productImageClass");
+    imageElement.setAttribute('id', "productImageID_".concat(_produit.idProduct));
+    imageElement.setAttribute("width", "200px");
+    imageElement.setAttribute("height", "200px");
+    imageTd.appendChild(imageElement);
+
 
     divElement.appendChild(refElement);
     divElement.appendChild(nameElement);
     divElement.appendChild(quantityElement);
-    divElement.appendChild(btnEdit);
-    divElement.appendChild(btnDelete);
-
-    divElement.appendChild(imageElement);
-    productsDiv.appendChild(divElement);
+    divElement.appendChild(imageTd);
+    divElement.appendChild(butETd);
+    divElement.appendChild(butDTd);
+    tblBody.appendChild(divElement);
+    tableP.appendChild(tblBody);
 
 }
 
@@ -210,9 +223,41 @@ function deleteProduct(idProd) {
 }
 
 function editProduct(idProduct) {
-    // SOMETHING TO DO 
-    //saveProductsList();
+    $("tr>td:first-child").each(function(index,element){
+        $(this).html(index+1)
+    })
+    
+    ListElement=[];
+
+     $(".btnEdit").click(function(){
+    var $tds = $(this).parents("tr").children("td").filter(":lt(4)");
+    var $content = $(this).html();
+    if ($content=="Edit") {   
+        $tds.each(function(){
+            $(this).html("<input type='text' value='"+$(this).html()+"'>")
+        });
+        $(this).html("Save")
+    }else{
+        $tds.each(function(){
+            var contentIn= $(this).children("input").val()
+            $(this).html(contentIn);
+            ListElement.push(contentIn);
+        });
+        $(this).html("Edit");     
+    }
 }
+
+)
+   
+
+
+
+        
+
+    saveProductsList();
+}
+
+
 
 function searchProduct() {
     let refProductToFind = document.querySelector('#productToFindRef').value.trim();
@@ -236,9 +281,45 @@ function deleteMainProductListDiv() {
         ourMainProductDiv.parentNode.removeChild(ourMainProductDiv);
     }
 
-    var productsDiv = document.createElement('div');
+    var productsDiv = document.createElement('p');
     productsDiv.setAttribute('id', 'productsDiv');
     document.body.appendChild(productsDiv);
+
+    const tbl = document.createElement("table");
+    const tblHead = document.createElement("thead");
+    const row = document.createElement("tr");
+    const cellR = document.createElement("th");
+    const cellTextR = document.createTextNode("Reference");
+    const cellN = document.createElement("th");
+    const cellTextN = document.createTextNode("Name");
+    const cellQ = document.createElement("th");
+    const cellTextQ = document.createTextNode("Quantity");
+    const cellI = document.createElement("th");
+    const cellButtonImage = document.createTextNode("Image");
+    const cellbtE = document.createElement("th");
+    const cellButtonE = document.createTextNode("Button Edit");
+    const cellbtD = document.createElement("th");
+    const cellButtonD = document.createTextNode("Button Delete");
+
+    cellR.appendChild(cellTextR);
+    cellN.appendChild(cellTextN);
+    cellQ.appendChild(cellTextQ);
+    cellI.appendChild(cellButtonImage);
+    cellbtE.appendChild(cellButtonE);
+    cellbtD.appendChild(cellButtonD);
+
+    row.appendChild(cellR);
+    row.appendChild(cellN);
+    row.appendChild(cellQ);
+    row.appendChild(cellI);
+    row.appendChild(cellbtE);
+    row.appendChild(cellbtD);
+
+    tblHead.appendChild(row);
+    tbl.appendChild(tblHead);
+    
+    productsDiv.appendChild(tbl);
+
 
     return productsDiv;
 }
@@ -249,9 +330,4 @@ document.addEventListener('click', function (event) {
     if (event.target.classList[0] == 'btnDelete') {
         deleteProduct(event.target.getAttribute("idproductdelete"));
     };
-
-    // button edit un produit
-    if (event.target.classList[0] == 'btnEdit') {
-        editProduct(event.target.getAttribute("idproductedit"));
-    }
 });
