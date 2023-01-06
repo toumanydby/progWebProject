@@ -71,7 +71,7 @@ function submit1(name) {
     }
     else{
         var mdpU=result.getMdpUser();
-        url="login.html?name="+name+"&mdp="+mdpU;
+        url="index.html?name="+name+"&mdp="+mdpU;
         window.location.href=url;
     }
 
