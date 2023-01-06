@@ -74,7 +74,7 @@ body {
     .sec1{
       height: 100vh;
       width: 100%;
-      background-image: url(22.png) ;
+      background-image: url(images/22.png) ;
       background-repeat: no-repeat ;
       background-position: top right ;
       
@@ -106,7 +106,7 @@ body {
     .sec2{
       height: 100vh;
       width: 100%;
-      background-image: url(image2.jpg) ;
+      background-image: url(images/image2.jpg) ;
       background-repeat: no-repeat ;
       background-position: center ;
       
